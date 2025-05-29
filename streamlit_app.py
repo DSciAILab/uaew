@@ -16,6 +16,9 @@ url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRih5bZ-W7jgTsXbjE7mWpOQe
 # 📥 Carrega os dados
 df = pd.read_csv(url)
 
+# Atualiza nome da coluna de imagem
+df.rename(columns={"PHOTO": "PHOTO1"}, inplace=True)
+
 if {"PHOTO1", "CORNER", "FIGHT N", "EVENT"}.issubset(df.columns):
     df = df[df["PHOTO1"].astype(str).str.startswith("http", na=False)].copy()
     df.fillna("", inplace=True)
@@ -40,7 +43,7 @@ if {"PHOTO1", "CORNER", "FIGHT N", "EVENT"}.issubset(df.columns):
         display: flex;
         flex-direction: column;
         align-items: stretch;
-        gap: 10px;
+        gap: 6px;
         width: 100%;
         position: relative;
     }
@@ -89,7 +92,7 @@ if {"PHOTO1", "CORNER", "FIGHT N", "EVENT"}.issubset(df.columns):
         font-size: 26px;
         font-weight: 800;
         color: #000;
-        margin-bottom: 4px;
+        margin: 0 0 4px 0;
     }
     .pending {
         background-color: #f8d7da;
@@ -135,7 +138,9 @@ if {"PHOTO1", "CORNER", "FIGHT N", "EVENT"}.issubset(df.columns):
         foto = f"<img src='{row['PHOTO1']}' width='80'>"
         nome = f"<div class='athlete-name'>{row.get('NAME', '')}</div>"
         status_html = "".join([
+            status_tag(row.get('BLACK SCREEN\nVIDEO', ''), "BLACK SCREEN"),
             status_tag(row.get('PHOTOSHOOT', ''), "PHOTOSHOOT"),
+            status_tag(row.get('BLOOD\nTEST', ''), "BLOOD TEST"),
             status_tag(row.get('UNIFORM', ''), "UNIFORM"),
             status_tag(row.get('MUSIC', ''), "MUSIC"),
             status_tag(row.get('STATS', ''), "STATS")
