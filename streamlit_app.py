@@ -3,7 +3,7 @@ import pandas as pd
 from streamlit_autorefresh import st_autorefresh
 
 # 🔁 Atualiza a página automaticamente a cada 60 segundos
-st_autorefresh(interval=60000, key="auto_refresh")
+st_autorefresh(interval=10000, key="auto_refresh")
 
 # CSV do Google Sheets
 url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRih5bZ-W7jgTsXbjE7mWpOQe8JeV4dQbMVH4gv9qhhkOc4NdKf-wXdRp7xwUtzZb8FqniMUt3VlXu-/pub?gid=330897584&single=true&output=csv"
