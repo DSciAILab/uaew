@@ -2,6 +2,9 @@ import streamlit as st
 import pandas as pd
 from streamlit_autorefresh import st_autorefresh
 
+st.set_page_config(page_title="Chave de Lutas", layout="wide")
+
+
 # 🔁 Atualiza a página automaticamente a cada 60 segundos
 st_autorefresh(interval=10000, key="auto_refresh")
 
