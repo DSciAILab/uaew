@@ -38,10 +38,33 @@ if {"PHOTO1", "CORNER", "FIGHT N", "EVENT"}.issubset(df.columns):
         border-radius: 10px;
         padding: 10px 20px;
         display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+        width: 100%;
+        position: relative;
+    }
+    .card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 6px;
+        width: 100%;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+    }
+    .blue-corner .card::before {
+        background-color: #007BFF;
+    }
+    .red-corner .card::before {
+        background-color: #DC3545;
+    }
+    .card-body {
+        display: flex;
         justify-content: space-between;
         align-items: center;
         gap: 25px;
-        width: 100%;
     }
     .card img {
         border-radius: 8px;
@@ -87,7 +110,7 @@ if {"PHOTO1", "CORNER", "FIGHT N", "EVENT"}.issubset(df.columns):
     .fight-number {
         font-size: 48px;
         font-weight: 900;
-        color: #b30000;
+        color: #999999;
         text-align: center;
         min-width: 140px;
     }
@@ -118,14 +141,19 @@ if {"PHOTO1", "CORNER", "FIGHT N", "EVENT"}.issubset(df.columns):
             status_tag(row.get('STATS', ''), "STATS")
         ])
         chegada = row.get("ARRIVAL", "")
+        corner_class = "blue-corner" if row.get("CORNER", "").upper() == "BLUE" else "red-corner"
         return f"""
-        <div class='card'>
-            {foto}
-            <div class='info-block'>
-                {nome}
-                <div class='status-row'>{status_html}</div>
+        <div class='{corner_class}'>
+            <div class='card'>
+                <div class='card-body'>
+                    {foto}
+                    <div class='info-block'>
+                        {nome}
+                        <div class='status-row'>{status_html}</div>
+                    </div>
+                    <div class='arrival-info'>{chegada}</div>
+                </div>
             </div>
-            <div class='arrival-info'>{chegada}</div>
         </div>
         """
 
