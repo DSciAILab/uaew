@@ -1,17 +1,19 @@
 import streamlit as st
-st.set_page_config(page_title="Chave de Lutas", layout="wide")
-
 import pandas as pd
-from PIL import Image
 from streamlit_autorefresh import st_autorefresh
 
-# 🔁 Atualiza a página automaticamente a cada 10 segundos
+st.set_page_config(page_title="Chave de Lutas", layout="wide")
+
+# ✅ TÍTULO CENTRAL
+st.markdown("<h1 style='text-align: center; font-size: 52px; margin-top: 10px;'>UAEW Fightweek Tasks</h1>", unsafe_allow_html=True)
+
+# 🔁 Atualização automática
 st_autorefresh(interval=10000, key="auto_refresh")
 
-# CSV do Google Sheets
+# 📄 CSV do Google Sheets
 url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRih5bZ-W7jgTsXbjE7mWpOQe8JeV4dQbMVH4gv9qhhkOc4NdKf-wXdRp7xwUtzZb8FqniMUt3VlXu-/pub?gid=330897584&single=true&output=csv"
 
-# Carrega os dados
+# 📥 Carrega os dados
 df = pd.read_csv(url)
 
 if {"PHOTO1", "CORNER", "FIGHT N", "EVENT"}.issubset(df.columns):
@@ -20,15 +22,9 @@ if {"PHOTO1", "CORNER", "FIGHT N", "EVENT"}.issubset(df.columns):
     df["FIGHT N"] = df["FIGHT N"].astype(str).str.zfill(2)
     df = df.sort_values(by=["EVENT", "FIGHT N", "CORNER"])
 
-    # CSS
+    # 🎨 CSS
     st.markdown("""
     <style>
-    .event-title {
-        font-size: 42px;
-        font-weight: 900;
-        text-align: center;
-        margin: 30px 0 10px 0;
-    }
     .fight-line {
         display: flex;
         justify-content: space-between;
@@ -38,7 +34,7 @@ if {"PHOTO1", "CORNER", "FIGHT N", "EVENT"}.issubset(df.columns):
     }
     .card {
         background-color: #e0e0e0;
-        border: 1px solid #bbb;
+        border: 1px solid #ccc;
         border-radius: 10px;
         padding: 10px 20px;
         display: flex;
@@ -67,8 +63,9 @@ if {"PHOTO1", "CORNER", "FIGHT N", "EVENT"}.issubset(df.columns):
         white-space: nowrap;
     }
     .athlete-name {
-        font-size: 20px;
-        font-weight: 700;
+        font-size: 26px;
+        font-weight: 800;
+        color: #000;
         margin-bottom: 4px;
     }
     .pending {
@@ -90,9 +87,15 @@ if {"PHOTO1", "CORNER", "FIGHT N", "EVENT"}.issubset(df.columns):
     .fight-number {
         font-size: 48px;
         font-weight: 900;
-        color: #333;
+        color: #b30000;
         text-align: center;
         min-width: 140px;
+    }
+    .event-title {
+        font-size: 38px;
+        font-weight: 800;
+        text-align: center;
+        margin: 30px 0 10px 0;
     }
     </style>
     """, unsafe_allow_html=True)
