@@ -1,15 +1,17 @@
 import streamlit as st
 import pandas as pd
+from streamlit_autorefresh import st_autorefresh
 
+# 🔁 Atualiza a página automaticamente a cada 60 segundos
+st_autorefresh(interval=60000, key="auto_refresh")
 
-#if st.button("🔁 Atualizar painel"):
-#    st.experimental_rerun()
-
-# CSV
+# CSV do Google Sheets
 url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRih5bZ-W7jgTsXbjE7mWpOQe8JeV4dQbMVH4gv9qhhkOc4NdKf-wXdRp7xwUtzZb8FqniMUt3VlXu-/pub?gid=330897584&single=true&output=csv"
-df = pd.read_csv(url)
 
-st.set_page_config(page_title="Chave Horizontal", layout="wide")
+st.set_page_config(page_title="Chave de Lutas", layout="wide")
+
+# Carrega os dados
+df = pd.read_csv(url)
 
 if {"PHOTO1", "CORNER", "FIGHT N", "EVENT"}.issubset(df.columns):
     df = df[df["PHOTO1"].astype(str).str.startswith("http", na=False)].copy()
@@ -17,7 +19,7 @@ if {"PHOTO1", "CORNER", "FIGHT N", "EVENT"}.issubset(df.columns):
     df["FIGHT N"] = df["FIGHT N"].astype(str).str.zfill(2)
     df = df.sort_values(by=["EVENT", "FIGHT N", "CORNER"])
 
-    # CSS horizontal otimizado
+    # CSS
     st.markdown("""
     <style>
     .event-title {
@@ -144,4 +146,3 @@ if {"PHOTO1", "CORNER", "FIGHT N", "EVENT"}.issubset(df.columns):
 
 else:
     st.error("❌ Faltam colunas obrigatórias: 'PHOTO1', 'CORNER', 'FIGHT N', 'EVENT'")
-
