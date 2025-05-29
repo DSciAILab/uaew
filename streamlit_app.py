@@ -150,8 +150,8 @@ if {"PHOTO1", "CORNER", "FIGHT N", "EVENT"}.issubset(df.columns):
                     <div class='info-block'>
                         {nome}
                         <div class='status-row'>{status_html}</div>
+                        <div class='arrival-info'>{chegada}</div>
                     </div>
-                    <div class='arrival-info'>{chegada}</div>
                 </div>
             </div>
         </div>
