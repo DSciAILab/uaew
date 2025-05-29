@@ -8,8 +8,10 @@ from streamlit_autorefresh import st_autorefresh
 # 🔁 Atualiza a página automaticamente a cada 10 segundos
 st_autorefresh(interval=10000, key="auto_refresh")
 
-# 📊 CSV do Google Sheets
+# CSV do Google Sheets
 url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRih5bZ-W7jgTsXbjE7mWpOQe8JeV4dQbMVH4gv9qhhkOc4NdKf-wXdRp7xwUtzZb8FqniMUt3VlXu-/pub?gid=330897584&single=true&output=csv"
+
+# Carrega os dados
 df = pd.read_csv(url)
 
 if {"PHOTO1", "CORNER", "FIGHT N", "EVENT"}.issubset(df.columns):
@@ -18,12 +20,12 @@ if {"PHOTO1", "CORNER", "FIGHT N", "EVENT"}.issubset(df.columns):
     df["FIGHT N"] = df["FIGHT N"].astype(str).str.zfill(2)
     df = df.sort_values(by=["EVENT", "FIGHT N", "CORNER"])
 
-    # 🎨 CSS Customizado
+    # CSS
     st.markdown("""
     <style>
     .event-title {
-        font-size: 38px;
-        font-weight: 800;
+        font-size: 42px;
+        font-weight: 900;
         text-align: center;
         margin: 30px 0 10px 0;
     }
@@ -35,8 +37,8 @@ if {"PHOTO1", "CORNER", "FIGHT N", "EVENT"}.issubset(df.columns):
         margin-bottom: 40px;
     }
     .card {
-        background-color: #f9f9f9;
-        border: 1px solid #ccc;
+        background-color: #e0e0e0;
+        border: 1px solid #bbb;
         border-radius: 10px;
         padding: 10px 20px;
         display: flex;
@@ -86,16 +88,15 @@ if {"PHOTO1", "CORNER", "FIGHT N", "EVENT"}.issubset(df.columns):
         font-size: 13px;
     }
     .fight-number {
-        font-size: 32px;
-        font-weight: 800;
-        color: #b30000;
+        font-size: 48px;
+        font-weight: 900;
+        color: #333;
         text-align: center;
         min-width: 140px;
     }
     </style>
     """, unsafe_allow_html=True)
 
-    # 🧩 Tags de Status
     def status_tag(valor, label):
         estado = str(valor).strip().lower()
         if estado == "pending":
@@ -104,7 +105,6 @@ if {"PHOTO1", "CORNER", "FIGHT N", "EVENT"}.issubset(df.columns):
             return f"<div class='done'>{label}</div>"
         return ""
 
-    # 🧱 Card do atleta
     def render_card(row):
         foto = f"<img src='{row['PHOTO1']}' width='80'>"
         nome = f"<div class='athlete-name'>{row.get('NAME', '')}</div>"
@@ -126,9 +126,8 @@ if {"PHOTO1", "CORNER", "FIGHT N", "EVENT"}.issubset(df.columns):
         </div>
         """
 
-    # 📦 Loop por Evento e Lutas
     for evento, grupo_evento in df.groupby("EVENT"):
-        st.markdown(f"<div class='event-title'>🎯 Evento: {evento}</div>", unsafe_allow_html=True)
+        st.markdown(f"<div class='event-title'>{evento}</div>", unsafe_allow_html=True)
 
         for luta, luta_df in grupo_evento.groupby("FIGHT N"):
             blue = luta_df[luta_df["CORNER"].str.upper() == "BLUE"]
@@ -140,7 +139,7 @@ if {"PHOTO1", "CORNER", "FIGHT N", "EVENT"}.issubset(df.columns):
             with col1:
                 st.markdown(render_card(blue.iloc[0]) if not blue.empty else "🟦 Sem atleta no corner BLUE", unsafe_allow_html=True)
             with col2:
-                st.markdown(f"<div class='fight-number'>🥊<br>Luta {luta}</div>", unsafe_allow_html=True)
+                st.markdown(f"<div class='fight-number'>{luta}</div>", unsafe_allow_html=True)
             with col3:
                 st.markdown(render_card(red.iloc[0]) if not red.empty else "🔴 Sem atleta no corner RED", unsafe_allow_html=True)
 
@@ -148,4 +147,3 @@ if {"PHOTO1", "CORNER", "FIGHT N", "EVENT"}.issubset(df.columns):
 
 else:
     st.error("❌ Faltam colunas obrigatórias: 'PHOTO1', 'CORNER', 'FIGHT N', 'EVENT'")
-
