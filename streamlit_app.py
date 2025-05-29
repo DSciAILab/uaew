@@ -2,8 +2,8 @@ import streamlit as st
 import pandas as pd
 
 
-if st.button("🔁 Atualizar painel"):
-    st.experimental_rerun()
+#if st.button("🔁 Atualizar painel"):
+#    st.experimental_rerun()
 
 # CSV
 url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRih5bZ-W7jgTsXbjE7mWpOQe8JeV4dQbMVH4gv9qhhkOc4NdKf-wXdRp7xwUtzZb8FqniMUt3VlXu-/pub?gid=330897584&single=true&output=csv"
