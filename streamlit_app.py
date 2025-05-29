@@ -44,6 +44,51 @@ pagina = st.sidebar.radio("Visualização", ["Dashboard", "Tabela", "Perfil do A
 
 if pagina == "Dashboard":
     st.title("UAEW Fightweek Tasks")
+
+    st.markdown("""
+    <style>
+    .card {
+        background-color: #f0f0f0;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        padding: 10px;
+        position: relative;
+    }
+    .blue-bar {
+        height: 8px;
+        background-color: #007bff;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        border-top-left-radius: 8px;
+        border-top-right-radius: 8px;
+    }
+    .red-bar {
+        height: 8px;
+        background-color: #dc3545;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        border-top-left-radius: 8px;
+        border-top-right-radius: 8px;
+    }
+    .athlete-name {
+        font-size: 22px;
+        font-weight: 700;
+        color: black;
+        margin: 8px 0;
+    }
+    .fight-number {
+        font-size: 42px;
+        font-weight: bold;
+        color: #666;
+        text-align: center;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
     if {"PHOTO1", "CORNER", "FIGHT N", "EVENT"}.issubset(df.columns):
         df = df[df["PHOTO1"].astype(str).str.startswith("http", na=False)].copy()
         df.fillna("", inplace=True)
@@ -54,20 +99,27 @@ if pagina == "Dashboard":
             st.subheader(evento)
             for luta, luta_df in grupo_evento.groupby("FIGHT N"):
                 col1, col2, col3 = st.columns([5, 2, 5])
+
                 with col1:
                     atleta_blue = luta_df[luta_df["CORNER"].str.upper() == "BLUE"]
                     if not atleta_blue.empty:
                         nome = atleta_blue.iloc[0]['NAME']
+                        st.markdown("<div class='card'><div class='blue-bar'></div>", unsafe_allow_html=True)
                         st.image(atleta_blue.iloc[0]['PHOTO1'], width=80)
-                        st.markdown(f"[{nome}](?athlete={nome})")
+                        st.markdown(f"<div class='athlete-name'><a href='?athlete={nome}'>{nome}</a></div>", unsafe_allow_html=True)
+                        st.markdown("</div>", unsafe_allow_html=True)
+
                 with col2:
-                    st.markdown(f"<h3 style='text-align: center;'>{luta}</h3>", unsafe_allow_html=True)
+                    st.markdown(f"<div class='fight-number'>{luta}</div>", unsafe_allow_html=True)
+
                 with col3:
                     atleta_red = luta_df[luta_df["CORNER"].str.upper() == "RED"]
                     if not atleta_red.empty:
                         nome = atleta_red.iloc[0]['NAME']
+                        st.markdown("<div class='card'><div class='red-bar'></div>", unsafe_allow_html=True)
                         st.image(atleta_red.iloc[0]['PHOTO1'], width=80)
-                        st.markdown(f"[{nome}](?athlete={nome})")
+                        st.markdown(f"<div class='athlete-name'><a href='?athlete={nome}'>{nome}</a></div>", unsafe_allow_html=True)
+                        st.markdown("</div>", unsafe_allow_html=True)
 
 elif pagina == "Tabela":
     st.title("Tabela de Acompanhamento Completa")
