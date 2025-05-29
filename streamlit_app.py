@@ -27,16 +27,15 @@ def salvar_perfis_json(perfis):
         "Authorization": f"Bearer {st.secrets['GITHUB_TOKEN']}",
         "Accept": "application/vnd.github.v3+json"
     }
-    # Obtém o SHA atual
     get_response = requests.get(api_url, headers=headers)
     sha = get_response.json().get("sha")
-
     content = json.dumps(perfis, indent=4)
-    b64_content = content.encode("utf-8").decode("utf-8")
-
+    encoded_content = content.encode("utf-8")
+    import base64
+    b64_content = base64.b64encode(encoded_content).decode("utf-8")
     data = {
         "message": "Atualiza perfil de atleta via Streamlit",
-        "content": b64_content.encode("utf-8").decode("utf-8").encode("base64").decode(),
+        "content": b64_content,
         "sha": sha
     }
     return requests.put(api_url, headers=headers, json=data)
@@ -76,11 +75,13 @@ elif pagina == "Tabela":
     st.dataframe(df)
 
 elif pagina == "Perfil do Atleta":
-    atleta = st.query_params.get("athlete")
+    perfis = carregar_perfis()
+    nomes_disponiveis = list(perfis.keys())
+    atleta = st.selectbox("Selecione o atleta", nomes_disponiveis)
+
     if not atleta:
-        st.info("Nenhum atleta selecionado. Volte à Dashboard e clique em um nome.")
+        st.info("Nenhum atleta selecionado.")
     else:
-        perfis = carregar_perfis()
         dados = perfis.get(atleta, {"music": "", "height": "", "notes": ""})
 
         st.header(f"Perfil: {atleta}")
