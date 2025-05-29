@@ -1,8 +1,13 @@
 import streamlit as st
+st.set_page_config(page_title="Chave de Lutas", layout="wide")
+
+# Agora o resto do seu código
 import pandas as pd
+from PIL import Image
 from streamlit_autorefresh import st_autorefresh
 
-st.set_page_config(page_title="Chave de Lutas", layout="wide")
+# Continue com o app normalmente daqui pra frente
+
 
 
 # 🔁 Atualiza a página automaticamente a cada 60 segundos
