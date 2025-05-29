@@ -1,24 +1,15 @@
 import streamlit as st
 st.set_page_config(page_title="Chave de Lutas", layout="wide")
 
-# Agora o resto do seu código
 import pandas as pd
 from PIL import Image
 from streamlit_autorefresh import st_autorefresh
 
-# Continue com o app normalmente daqui pra frente
-
-
-
-# 🔁 Atualiza a página automaticamente a cada 60 segundos
+# 🔁 Atualiza a página automaticamente a cada 10 segundos
 st_autorefresh(interval=10000, key="auto_refresh")
 
-# CSV do Google Sheets
+# 📊 CSV do Google Sheets
 url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRih5bZ-W7jgTsXbjE7mWpOQe8JeV4dQbMVH4gv9qhhkOc4NdKf-wXdRp7xwUtzZb8FqniMUt3VlXu-/pub?gid=330897584&single=true&output=csv"
-
-st.set_page_config(page_title="Chave de Lutas", layout="wide")
-
-# Carrega os dados
 df = pd.read_csv(url)
 
 if {"PHOTO1", "CORNER", "FIGHT N", "EVENT"}.issubset(df.columns):
@@ -27,7 +18,7 @@ if {"PHOTO1", "CORNER", "FIGHT N", "EVENT"}.issubset(df.columns):
     df["FIGHT N"] = df["FIGHT N"].astype(str).str.zfill(2)
     df = df.sort_values(by=["EVENT", "FIGHT N", "CORNER"])
 
-    # CSS
+    # 🎨 CSS Customizado
     st.markdown("""
     <style>
     .event-title {
@@ -104,6 +95,7 @@ if {"PHOTO1", "CORNER", "FIGHT N", "EVENT"}.issubset(df.columns):
     </style>
     """, unsafe_allow_html=True)
 
+    # 🧩 Tags de Status
     def status_tag(valor, label):
         estado = str(valor).strip().lower()
         if estado == "pending":
@@ -112,6 +104,7 @@ if {"PHOTO1", "CORNER", "FIGHT N", "EVENT"}.issubset(df.columns):
             return f"<div class='done'>{label}</div>"
         return ""
 
+    # 🧱 Card do atleta
     def render_card(row):
         foto = f"<img src='{row['PHOTO1']}' width='80'>"
         nome = f"<div class='athlete-name'>{row.get('NAME', '')}</div>"
@@ -133,6 +126,7 @@ if {"PHOTO1", "CORNER", "FIGHT N", "EVENT"}.issubset(df.columns):
         </div>
         """
 
+    # 📦 Loop por Evento e Lutas
     for evento, grupo_evento in df.groupby("EVENT"):
         st.markdown(f"<div class='event-title'>🎯 Evento: {evento}</div>", unsafe_allow_html=True)
 
@@ -154,3 +148,4 @@ if {"PHOTO1", "CORNER", "FIGHT N", "EVENT"}.issubset(df.columns):
 
 else:
     st.error("❌ Faltam colunas obrigatórias: 'PHOTO1', 'CORNER', 'FIGHT N', 'EVENT'")
+
