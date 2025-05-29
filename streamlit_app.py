@@ -3,6 +3,7 @@ import pandas as pd
 import requests
 import json
 from streamlit_autorefresh import st_autorefresh
+import base64
 
 # Configuração da página
 st.set_page_config(page_title="UAEW Fightweek Tasks", layout="wide")
@@ -29,10 +30,8 @@ def salvar_perfis_json(perfis):
     }
     get_response = requests.get(api_url, headers=headers)
     sha = get_response.json().get("sha")
-    content = json.dumps(perfis, indent=4)
-    encoded_content = content.encode("utf-8")
-    import base64
-    b64_content = base64.b64encode(encoded_content).decode("utf-8")
+    content = json.dumps(perfis, indent=4).encode("utf-8")
+    b64_content = base64.b64encode(content).decode("utf-8")
     data = {
         "message": "Atualiza perfil de atleta via Streamlit",
         "content": b64_content,
@@ -77,11 +76,12 @@ elif pagina == "Tabela":
 elif pagina == "Perfil do Atleta":
     perfis = carregar_perfis()
     nomes_disponiveis = list(perfis.keys())
-    atleta = st.selectbox("Selecione o atleta", nomes_disponiveis)
 
-    if not atleta:
-        st.info("Nenhum atleta selecionado.")
+    if not nomes_disponiveis:
+        st.warning("Nenhum atleta encontrado no arquivo de perfis.")
     else:
+        atleta = st.selectbox("Selecione o atleta", nomes_disponiveis, index=0)
+
         dados = perfis.get(atleta, {"music": "", "height": "", "notes": ""})
 
         st.header(f"Perfil: {atleta}")
